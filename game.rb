@@ -2,8 +2,15 @@ class Game
 
 	def initialize
 
-		@victory=false
-		@player_input=false
+		@victory = false
+		@player_input = false
+		@rows=[]
+		@solution = []
+		colors=["black","white","blue","yellow","red","green"]
+		4.times do
+			r=rand(0..5)
+			@solution << colors[r]
+		end
 
 		repeat_intro = true
 
@@ -17,9 +24,11 @@ class Game
 			end
 		end
 
+		# Prints instructions for the player
 		if instructions == "y"
 			puts "\n\nYou have 12 turns to find the solution."
 			puts "The solution is an arrangement of a possible six colored pegs into 4 holes."
+			puts "The six colors are black, white, green, yellow, red, and blue."
 			puts "Each guess you make will be responded to with up to four white or black pegs."
 			puts "Each white peg represents a correct color being chosen, but placed in the wrong hole."
 			puts "Each black peg represents a correct color in the correct hole"
@@ -27,22 +36,47 @@ class Game
 			gets
 		end
 
+		# GAME LOOP
 		1.upto(13) do |i|
-			if i < 13
-				puts "You have #{13 - i} tries left!"
-				puts "What do you think the solution is?"
-				@player_input = gets.chomp
-				if @player_input == "win"
-					puts "YOU WIN!"
+
+			# Player turn 1 loop
+			if i == 1
+				puts "\nWhat do you think the solution is?"
+				puts "(Put your answer as the four colors in order with spaces to separate them)"
+				@player_input = gets.chomp.split(" ")
+				# adds attempt to rows
+				@rows << Row.new(@solution,1,@player_input)
+				# Checks if player won
+				if @player_input == @solution
+					puts "\nYOU WIN!"
 					return
 				end
+
+			# Player general turn loop
+			elsif i < 13
+				@rows.each {|row| row.display}
+				puts "\nYou have #{13 - i} tries left!"
+				puts "\nWhat do you think the solution is?"
+				@player_input = gets.chomp.split(" ")
+				# adds attempt to rows
+				@rows << Row.new(@solution,i,@player_input)
+				# Checks if player won
+				if @player_input == @solution
+					puts "\nYOU WIN!"
+					return
+				end
+
+			# End of player turns
 			else
-				if @player_input == "win"
-					puts "YOU WIN!"
+				@rows.each {|row| row.display}
+				# Checks if player won
+				if @player_input == @solution
+					puts "\nYOU WIN!"
 					return
 				end
-				puts "Sorry, you fail."
+				puts "\nSorry, you fail. The solution is: #{@solution.join(" ")}"
 			end
+
 		end
 
 	end
