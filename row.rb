@@ -14,21 +14,32 @@ class Game
 		end
 
 		def respond
+
 			@response = []
-			compare = @solution.dup
+
+			compare_solution = @solution.dup
+			compare_input = @input.dup
+
 			4.times do |i|
-				4.times do |j|
-					if @input[i] == compare[j]
-						if i == j
-							@response << "black"
-						else
-							@response << "white"
-						end
-						compare[j] = ""
-					end
+				if compare_input[i] == compare_solution[i]
+					@response << "black"
+					compare_input[i] = "nomatchinput"
+					compare_solution[i] = "nomatchcompare"
 				end
 			end
-			@response.sort
+
+			4.times do |i|
+				4.times do |j|
+					if compare_input[i] == compare_solution[j]
+						@response << "white"
+						compare_input[i] = "nomatchinput"
+						compare_solution[j] = "nomatchcompare"
+					end
+				end
+
+			end
+
+			@response.sort!
 		end
 
 		def display

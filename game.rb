@@ -2,30 +2,59 @@ class Game
 
 	def initialize
 
+		set_variables
+
+		intro_loop
+
+		game_loop
+
+	end
+
+	def set_variables
+
 		@victory = false
 		@player_input = false
 		@rows=[]
 		@solution = []
+		comp_choose
+		@solution = ["black","white","yellow","green"]
+
+	end
+
+	def comp_choose
 		colors=["black","white","blue","yellow","red","green"]
 		4.times do
 			r=rand(0..5)
 			@solution << colors[r]
 		end
+	end
+
+	def intro_loop
 
 		repeat_intro = true
 
 		while repeat_intro
+
 			repeat_intro = false
 			puts "Welcome to Mastermind, would you like the rules? (y/n)"
 			instructions = gets.chomp
+
 			if !(instructions =~ /[yn]/)
 				puts "Sorry, you must input y or n..."
 				repeat_intro = true
 			end
+
 		end
 
 		# Prints instructions for the player
 		if instructions == "y"
+			instruct
+		end
+
+	end
+
+	def instruct
+
 			puts "\n\nYou have 12 turns to find the solution."
 			puts "The solution is an arrangement of a possible six colored pegs into 4 holes."
 			puts "The six colors are black, white, green, yellow, red, and blue."
@@ -34,9 +63,12 @@ class Game
 			puts "Each black peg represents a correct color in the correct hole"
 			puts "\nWhen you are ready to play, say anything"
 			gets
-		end
 
-		# GAME LOOP
+	end
+
+	#GAME LOOOP
+	def game_loop
+
 		1.upto(13) do |i|
 
 			# Player turn 1 loop
