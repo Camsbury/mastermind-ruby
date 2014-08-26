@@ -17,7 +17,6 @@ class Game
 		@rows=[]
 		@solution = []
 		comp_choose
-		@solution = ["black","white","yellow","green"]
 
 	end
 
